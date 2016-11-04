@@ -16,7 +16,7 @@
         <li class="nav_li"><a href="index.html" class="nav_item">首页</a></li>
         <li class="nav_li"><a href="app.html" class="nav_item">应用市场</a></li>
         <li class="nav_li"><a href="game.html" class="nav_item">游戏市场</a></li>
-        <li class="nav_li"><a href="#" class="nav_item" target="_blank">开放平台</a></li>
+        <li class="nav_li"><a href="open.html" class="nav_item" target="_blank">开放平台</a></li>
         <li class="nav_search">
           <div class="search_wrap">
             <input type="text" name="name" value="" placeholder="搜索应用或游戏">
@@ -58,16 +58,14 @@
         <h3 class="column-title">最新上架</h3>
       </div>
       <div class="content-wrap">
-        <div class="appMarket-fr-warp">
-
+        <div class="appMarket-fr-warp  add">
         </div>
       </div>
       <div class="title-wrap">
         <h3 class="column-title">热门应用</h3>
       </div>
       <div class="content-wrap">
-        <div class="appMarket-fr-warp">
-
+        <div class="appMarket-fr-warp  add1">
         </div>
       </div>
     </div>
@@ -105,6 +103,180 @@
 <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <script src="js/game.js" charset="utf-8"></script>
 <script type="text/javascript">
+var add=$('.add');
+var add1=$('.add1')
+var a = $(".a");
+var all=$('.all');
+var bb=[]
+function requestAjax(url,callback){
+	var request = new XMLHttpRequest()
+	request.open("GET",url,true)
+	request.send();
+	request.onreadystatechange = function(){
+		if (request.readyState == 4 && request.status == 200) {
+			var str = request.responseText;
+			var obj = JSON.parse(str)
+			if(callback){
+				callback(obj)
+			}
+		}
+	}
+}
+requestAjax("../php/code/app.php?name="+'全部应用',function(obj) {
+//					buju(obj)
+					buju(obj,add)
+					buju(obj,add1)					
+				})
+var a = document.querySelectorAll(".a")
+	for (var i =  0; i < a.length; i++) {
+		a[i].arr = [];	
+		a[i].onclick = function(){
+//			bb.splice(0,bb.length)
+			$(".remove").remove();
+			var a1=$(this).text();
+//			var a = this;
+			if(this.arr.length == 0){
+				requestAjax("../php/code/game.php?name="+a1,function(obj) {
+//					a.arr = obj;
+					bb=obj
+					buju(bb,add)
+					buju(bb,add1)
+//					buju(obj,add1)
+//					buju(a.arr);
+				})
+			}else{
+				buju(this.arr)
+			}
+		}
+	}
+
+
+	function buju(arr,add) {
+	for (var i = 0; i <arr.length; i++) {
+		var al=$('<a/>');
+		al[0].href="app_detail.html";
+		al.appendTo(add)
+		var div=$('<div/>');
+		div.appendTo(al);
+		div.addClass('remove')
+		div.css({
+			float:'left',
+			width:'100px',
+			height:'148px',
+			textAlign:'center',
+			margin:'30px 20px 15px 30px',
+			position:'relative',
+		});
+		var img=$('<img/>');
+		img.appendTo(div)
+		img[0].src="imgall/"+arr[i].app_img;
+		img.css({width:'100px',height:'100px'})
+		var p=$('<p/>')
+		p.text("QQ")
+		p.appendTo(div)
+		var p1=$('<p/>')
+		p1.text(arr[i].app_sort)
+		p1.appendTo(div)
+		p1.css({
+			display:'block',
+			overflow:'hidden',
+			position: 'relative',
+			height:'30px',
+			lineHeight:'30px'
+		})
+		var a2=$('<a/>')
+		a2.text('下载')
+		a2.appendTo(p1)	
+		a2.css({
+			 display:'inline-block',
+			 width:'70px',
+			 height:'30px',
+			 background:'deepskyblue',
+			 lineHeight:'30px',
+			 position:'absolute',
+			  left:'16px',
+			  top:'30px',
+			transition:'0.3s linear',
+			})
+			var div2=$('<div/>')
+			div2.appendTo(div)
+			div2.css({
+				position:'absolute',
+				left:'100px',
+				top:'-1px',
+				border:'1px solid black',
+				width:'290px',
+				height:'148px',
+				zIndex:'10',
+				position:'absolute',
+				background:'white',
+				display:'none',
+				marginLeft:'15px'
+			})
+			var pa=$('<p/>')
+			pa.text(arr[i].app_size)
+			pa.appendTo(div2)
+			pa.css({
+				position:'absolute',
+				left:'5px',
+				top:'20px'
+			})
+			var pb=$('<p/>')
+			pb.text(arr[0].app_name)
+			pb.appendTo(div2)
+			pb.css({
+				position:'absolute',
+				left:'5px',
+				top:'60px',
+			})
+			var pc=$('<p/>')
+			pc.text('扫码下载至手机')
+			pc.appendTo(div2)
+			pc.css({
+				position:'absolute',
+				left:'5px',
+				top:'100px',
+			})
+			var imga=$('<img/>')
+			imga[0].src='imgall/'+arr[i].app_2D;
+			imga.appendTo(div2)
+			imga.css({
+				width:'150px',
+				height:'100%',
+				position:'absolute',
+				right:'0px',
+				top:'0px'
+			})
+			div.on("mouseover",function(){
+					$(this.childNodes[2].childNodes[1]).css({
+						top:'0px',		
+					})
+					$(this.childNodes[3]).css({
+						 display:'block',
+					})
+				});
+				div.on('mouseout',function () {
+					$(this.childNodes[2].childNodes[1]).css({
+							top:'30px',			
+						})
+					$(this.childNodes[3]).css({
+						 display:'none',
+					})
+				})
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 </html>
