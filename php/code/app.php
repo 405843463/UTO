@@ -73,6 +73,12 @@ switch ($activity_name) {
     case "美化":
       $sqlstr = 'select * from uto_APP limit 15,14';
       break;
+      case "游戏":
+      $sqlstr = 'select * from uto_APP limit 18,11';
+      break;
+    case "应用":
+      $sqlstr = 'select * from uto_APP limit 15,14';
+      break;
     default:
       break;
 }
